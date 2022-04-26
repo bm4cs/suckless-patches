@@ -1,14 +1,12 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx        = 1;        /* border pixel of windows */
-static const Gap default_gap              = {.isgap = 1, .realgap = 10, .gappx = 10};
-static const unsigned int snap            = 32;       /* snap pixel */
-static const int showbar                  = 0;        /* 0 means no bar */
-static const int topbar                   = 1;        /* 0 means bottom bar */
-static const char *fonts[]                = { "FiraCode Nerd Font:pixelsize=11:antialias=true:autohint=true", "CaskaydiaCove Nerd Font Mono:pixelsize=10:antialias=true:autohint=true", "monospace:size=8" };
-static const char dmenufont[]             = "FiraCode Nerd Font:pixelsize=11:antialias=true:autohint=true";
-//static char *font = "FiraCode Nerd Font:pixelsize=12:antialias=true:autohint=true";
+static const unsigned int borderpx  = 1;        /* border pixel of windows */
+static const unsigned int snap      = 32;       /* snap pixel */
+static const int showbar            = 1;        /* 0 means no bar */
+static const int topbar             = 1;        /* 0 means bottom bar */
+static const char *fonts[]          = { "CaskaydiaCove Nerd Font Mono:pixelsize=10:antialias=true:autohint=true", "monospace:size=8" };
+static const char dmenufont[]       = "CaskaydiaCove Nerd Font Mono:pixelsize=10:antialias=true:autohint=true";
 static const char col_matrix_green[]      = "#00FF41";
 static const char col_matrix_green_dark[] = "#008F11";
 static const char col_matrix_black[]      = "#222222";
@@ -21,24 +19,21 @@ static const char *colors[][3]            = {
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
-
-// https://dwm.suckless.org/customisation/rules/
 static const Rule rules[] = {
 	/* xprop(1):
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class         instance       title            tags mask     iscentered     isfloating   monitor */
-	{ "Gimp",        NULL,          NULL,            0,            0,             1,           -1 },
-	{ "st-256color", "st-256color", "pulsemixer",    0,            1,             1,           -1 },
-	{ "st-256color", "st-256color", "bc",            0,            1,             1,           -1 },
-	{ "mpv",         "mpv",         "mpvfloat",      0,            1,             1,           -1 },
+	/* class      instance    title       tags mask     isfloating   monitor */
+	{ "Gimp",     NULL,       NULL,       0,            1,           -1 },
+	{ "Firefox",  NULL,       NULL,       1 << 8,       0,           -1 },
 };
 
 /* layout(s) */
-static const float mfact     = 0.5; /* factor of master area size [0.05..0.95] */
+static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
 static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
+static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -62,14 +57,10 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static char dmenumon[2]            = "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *calccmd[]       = { "st", "-e", "bc -l", NULL };
+static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_matrix_black, "-nf", col_matrix_green_dark, "-sb", col_matrix_black, "-sf", col_matrix_green, NULL };
+static const char *termcmd[]  = { "st", NULL };
 static const char *camtogglecmd[]  = { "camtoggle", NULL };
-static const char *dmenucmd[]      = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_matrix_black, "-nf", col_matrix_green_dark, "-sb", col_matrix_black, "-sf", col_matrix_green, NULL };
-static const char *pulsemixercmd[] = { "st", "-e", "pulsemixer", NULL };
-static const char *taskmgrcmd[]    = { "st", "-n", "top", "-e", "htop", NULL };
-static const char *termcmd[]       = { "st", NULL };
-static const char *timecmd[]       = { "popinfo2", NULL };
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -96,10 +87,6 @@ static Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
-    { MODKEY,                       XK_minus,  setgaps,        {.i = -5 } },
-	{ MODKEY,                       XK_equal,  setgaps,        {.i = +5 } },
-	{ MODKEY|ShiftMask,             XK_minus,  setgaps,        {.i = GAP_RESET } },
-	{ MODKEY|ShiftMask,             XK_equal,  setgaps,        {.i = GAP_TOGGLE} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)
@@ -110,13 +97,7 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
-
-	/* bens keys */
 	{ MEH,                          XK_c,      spawn,          {.v = camtogglecmd } },
-	{ MEH,                          XK_n,      spawn,          {.v = calccmd } },
-	{ MEH,                          XK_m,      spawn,          {.v = pulsemixercmd } },
-	{ MEH,                          XK_Escape, spawn,          {.v = taskmgrcmd } },
-	{ MEH,                          XK_t,      spawn,          {.v = timecmd } },
 };
 
 /* button definitions */
