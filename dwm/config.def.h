@@ -28,11 +28,11 @@ static const Rule rules[] = {
 	 *	WM_CLASS(STRING) = instance, class
 	 *	WM_NAME(STRING) = title
 	 */
-	/* class         instance       title            tags mask     iscentered     isfloating   monitor */
-	{ "Gimp",        NULL,          NULL,            0,            0,             1,           -1 },
-	{ "st-256color", "st-256color", "pulsemixer",    0,            1,             1,           -1 },
-	{ "st-256color", "st-256color", "bc",            0,            1,             1,           -1 },
-	{ "mpv",         "mpv",         "mpvfloat",      0,            1,             1,           -1 },
+	/* class         instance       title            tags mask     isfloating   monitor */
+	{ "Gimp",        NULL,          NULL,            0,            1,           -1 },
+	{ "st-256color", "st-256color", "pulsemixer",    0,            1,           -1 },
+	{ "st-256color", "st-256color", "bc",            0,            1,           -1 },
+	{ "mpv",         "mpv",         "mpvfloat",      0,            1,           -1 },
 };
 
 /* layout(s) */
@@ -61,6 +61,10 @@ static const Layout layouts[] = {
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
+/* volume controls */
+#define XK_XF86AudioLowerVolume 0x1008ff11
+#define XK_XF86AudioRaiseVolume 0x1008ff13
+
 /* commands */
 static char dmenumon[2]            = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *calccmd[]       = { "st", "-e", "bc -l", NULL };
@@ -70,6 +74,9 @@ static const char *pulsemixercmd[] = { "st", "-e", "pulsemixer", NULL };
 static const char *taskmgrcmd[]    = { "st", "-n", "top", "-e", "htop", NULL };
 static const char *termcmd[]       = { "st", NULL };
 static const char *timecmd[]       = { "popinfo2", NULL };
+static const char *incrvol[]       = { "mixer", "vol", "+1:+1", NULL };
+static const char *decrvol[]       = { "mixer", "vol", "-1:-1", NULL };
+
 
 static Key keys[] = {
 	/* modifier                     key        function        argument */
@@ -110,6 +117,9 @@ static Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ShiftMask,             XK_q,      quit,           {0} },
+
+    { 0x0,                          XK_XF86AudioRaiseVolume,    spawn,  {.v = incrvol } },
+    { 0x0,                          XK_XF86AudioLowerVolume,    spawn,  {.v = decrvol } },
 
 	/* bens keys */
 	{ MEH,                          XK_c,      spawn,          {.v = camtogglecmd } },
