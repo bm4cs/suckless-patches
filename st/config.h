@@ -5,7 +5,8 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "CaskaydiaCove Nerd Font Mono:pixelsize=12:antialias=true:autohint=true";
+static char *font = "CaskaydiaCove Nerd Font Mono:pixelsize=14:antialias=true:autohint=true";
+//static char *font = "TerminessTTF Nerd Font Mono:pixelsize=10:antialias=true:autohint=true";
 static int borderpx = 2;
 
 /*
@@ -93,7 +94,8 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
 
-// monokai.dark theme from terminal.sexy
+/* Terminal colors (16 first used in escape sequence) */
+/* monokai.dark theme from terminal.sexy */
 static const char *colorname[] = {
 
   /* 8 normal colors */
@@ -121,22 +123,15 @@ static const char *colorname[] = {
   [257] = "#f8f8f2", /* foreground */
 };
 
+
 /*
  * Default colors (colorname index)
  * foreground, background, cursor, reverse cursor
  */
 unsigned int defaultfg = 257;
 unsigned int defaultbg = 256;
-static unsigned int defaultcs = 257;
+unsigned int defaultcs = 257;
 static unsigned int defaultrcs = 257;
-
-/*
- * Colors used, when the specific fg == defaultfg. So in reverse mode this
- * will reverse too. Another logic would only make the simple feature too
- * complex.
- */
-static unsigned int defaultitalic = 7;
-static unsigned int defaultunderline = 7;
 
 /*
  * Default shape of cursor
@@ -182,7 +177,8 @@ static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
 	{ ShiftMask,            Button4, kscrollup,      {.i = 1} },
 	{ ShiftMask,            Button5, kscrolldown,    {.i = 1} },
-	{ XK_ANY_MOD,           Button3, selpaste,       {.i = 0},      1 },
+	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
+	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
 	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
 	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
