@@ -1,12 +1,13 @@
 /* See LICENSE file for copyright and license details. */
 
+#include "themes/catppuccin-mocha.h"
+
 /*
  * appearance
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "CaskaydiaCove Nerd Font Mono:pixelsize=14:antialias=true:autohint=true";
-//static char *font = "TerminessTTF Nerd Font Mono:pixelsize=10:antialias=true:autohint=true";
+static char *font = "monospace:size=12";
 static int borderpx = 2;
 
 /*
@@ -94,44 +95,13 @@ char *termname = "st-256color";
  */
 unsigned int tabspaces = 8;
 
-/* Terminal colors (16 first used in escape sequence) */
-/* monokai.dark theme from terminal.sexy */
-static const char *colorname[] = {
-
-  /* 8 normal colors */
-  [0] = "#272822", /* black   */
-  [1] = "#f92672", /* red     */
-  [2] = "#a6e22e", /* green   */
-  [3] = "#f4bf75", /* yellow  */
-  [4] = "#66d9ef", /* blue    */
-  [5] = "#ae81ff", /* magenta */
-  [6] = "#a1efe4", /* cyan    */
-  [7] = "#f8f8f2", /* white   */
-
-  /* 8 bright colors */
-  [8]  = "#75715e", /* black   */
-  [9]  = "#f92672", /* red     */
-  [10] = "#a6e22e", /* green   */
-  [11] = "#f4bf75", /* yellow  */
-  [12] = "#66d9ef", /* blue    */
-  [13] = "#ae81ff", /* magenta */
-  [14] = "#a1efe4", /* cyan    */
-  [15] = "#f9f8f5", /* white   */
-
-  /* special colors */
-  [256] = "#272822", /* background */
-  [257] = "#f8f8f2", /* foreground */
-};
-
-
 /*
- * Default colors (colorname index)
- * foreground, background, cursor, reverse cursor
+ * Colors used, when the specific fg == defaultfg. So in reverse mode this
+ * will reverse too. Another logic would only make the simple feature too
+ * complex.
  */
-unsigned int defaultfg = 257;
-unsigned int defaultbg = 256;
-unsigned int defaultcs = 257;
-static unsigned int defaultrcs = 257;
+static unsigned int defaultitalic = 7;
+static unsigned int defaultunderline = 7;
 
 /*
  * Default shape of cursor
@@ -177,8 +147,7 @@ static MouseShortcut mshortcuts[] = {
 	/* mask                 button   function        argument       release */
 	{ ShiftMask,            Button4, kscrollup,      {.i = 1} },
 	{ ShiftMask,            Button5, kscrolldown,    {.i = 1} },
-	{ XK_ANY_MOD,           Button2, selpaste,       {.i = 0},      1 },
-	{ ShiftMask,            Button4, ttysend,        {.s = "\033[5;2~"} },
+	{ XK_ANY_MOD,           Button3, selpaste,       {.i = 0},      1 },
 	{ XK_ANY_MOD,           Button4, ttysend,        {.s = "\031"} },
 	{ ShiftMask,            Button5, ttysend,        {.s = "\033[6;2~"} },
 	{ XK_ANY_MOD,           Button5, ttysend,        {.s = "\005"} },
